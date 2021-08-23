@@ -1,0 +1,4 @@
+include ':Library:nativegl'
+include ':Library:gles3'
+include ':app'
+rootProject.name = "OpenGL4Android"

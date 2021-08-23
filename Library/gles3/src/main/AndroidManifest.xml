@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.dev.gles3">
+
+    <!-- Tell the system this app requires OpenGL ES 3.0. -->
+    <uses-feature
+        android:glEsVersion="0x00030000"
+        android:required="true" />
+
+    <application>
+        <activity
+            android:name=".OpenGl3MainActivity"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".example.Basic01Activity"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".example.Basic02Activity"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".example.Basic03Activity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".example.Basic04Activity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".example.Basic05Activity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".example.Basic06Activity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".player.VrGlSurfaceViewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".player.VrVideoActivity"
+            android:theme="@style/AppTheme" />
+    </application>
+</manifest>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.dev.nativegl">
+
+    <uses-feature
+        android:glEsVersion="0x00030002"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+
+    <application>
+        <activity android:name=".case.FirstExampleActivity" />
+
+        <activity android:name=".GlMainActivity" />
+
+        <activity android:name=".egl.EGLActivity" />
+    </application>
+</manifest>
