@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
      * Check for the permissions
      */
     private fun allPermissionsGranted() = permissions.all {
+        Log.e(TAG, "allPermissionsGranted: permission = $it")
         ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -52,17 +53,17 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btn_jni).setOnClickListener {
             startActivity(Intent(this, GlMainActivity::class.java))
         }
+        requestPermissions()
     }
-
-    override fun onResume() {
-        super.onResume()
-        /*if (allPermissionsGranted()) {
+    
+    private fun requestPermissions() {
+        if (allPermissionsGranted()) {
             Log.i(TAG, "onResume: yes")
             onPermissionGranted()
         } else {
             Log.i(TAG, "onResume: not")
             permissionRequest.launch(permissions.toTypedArray())
-        }*/
+        }
     }
 
     /**

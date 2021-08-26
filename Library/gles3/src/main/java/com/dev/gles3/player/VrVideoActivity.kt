@@ -8,12 +8,10 @@ import android.hardware.SensorManager
 import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
-import android.view.ScaleGestureDetector
-import android.view.Surface
-import android.view.WindowManager
+import android.view.*
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.transition.Visibility
 import com.dev.gles3.R
 import kotlin.math.cos
 import kotlin.math.sin
@@ -117,9 +115,11 @@ class VrVideoActivity : AppCompatActivity() {
         glSurfaceView.setRenderer(renderer)
         glSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
 
-        findViewById<Button>(R.id.btn_switch_mode).setOnClickListener {
+        val btnMode = findViewById<Button>(R.id.btn_switch_mode)
+        btnMode.setOnClickListener {
             changeDisplayMode()
         }
+        btnMode.visibility = View.INVISIBLE
         findViewById<Button>(R.id.btn_switch_sensor).setOnClickListener {
             changeInteractionMode()
         }
@@ -128,7 +128,11 @@ class VrVideoActivity : AppCompatActivity() {
     private fun initSensor() {
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         mRotation = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
-        sensorManager.registerListener(sensorEventListener, mRotation, SensorManager.SENSOR_DELAY_GAME)
+        sensorManager.registerListener(
+            sensorEventListener,
+            mRotation,
+            SensorManager.SENSOR_DELAY_GAME
+        )
     }
 
     private fun initScaleListener() {
@@ -215,7 +219,8 @@ class VrVideoActivity : AppCompatActivity() {
                     var distanceY = startRawY - me.rawY
 
                     // 这里的0.1f是为了不上摄像机移动的过快
-                    distanceY = TOUCH_SCALE_FACTOR * (distanceY) / windowManager.defaultDisplay.height
+                    distanceY =
+                        TOUCH_SCALE_FACTOR * (distanceY) / windowManager.defaultDisplay.height
 
                     yFlingAngleTemp = distanceY * 180 / (Math.PI * 3)
 
@@ -227,12 +232,15 @@ class VrVideoActivity : AppCompatActivity() {
                     }
 
                     // 这里的0.1f是为了不上摄像机移动的过快
-                    distanceX = TOUCH_SCALE_FACTOR * (-distanceX) / windowManager.defaultDisplay.width
+                    distanceX =
+                        TOUCH_SCALE_FACTOR * (-distanceX) / windowManager.defaultDisplay.width
                     xFlingAngleTemp = distanceX * 180 / (Math.PI * 3)
 
-                    mAngleX = (cos(yFlingAngle + yFlingAngleTemp) * sin(xFlingAngle + xFlingAngleTemp)).toFloat()
+                    mAngleX =
+                        (cos(yFlingAngle + yFlingAngleTemp) * sin(xFlingAngle + xFlingAngleTemp)).toFloat()
                     mAngleY = -(sin(yFlingAngle + yFlingAngleTemp)).toFloat()
-                    mAngleZ = (cos(yFlingAngle + yFlingAngleTemp) * cos(xFlingAngle + xFlingAngleTemp)).toFloat()
+                    mAngleZ =
+                        (cos(yFlingAngle + yFlingAngleTemp) * cos(xFlingAngle + xFlingAngleTemp)).toFloat()
 
                     renderer.setRotateAngle(mAngleX, mAngleY, mAngleZ)
                     glSurfaceView.requestRender()

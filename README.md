@@ -1,5 +1,6 @@
 # Android 平台使用 OpenGL ES 绘制图像，实现全景图片和视屏
     主要分为两个 Module 来处理，分别是在Android上层实现和在Jni层实现
+    在opengl的语法方面，在Android studio上可以安装一个glsl的插件，方便阅读和编辑glsl的语法。
 
 ## 在 Android 应用层使用 OpenGL ES
     代码借鉴于最后部分的链接，java实现的地方，改用了kotlin来处理。这一部分主要是做一个全景播放器

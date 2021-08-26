@@ -6,9 +6,6 @@
         android:glEsVersion="0x00030002"
         android:required="true" />
 
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
-
     <application>
         <activity android:name=".case.FirstExampleActivity" />
 
