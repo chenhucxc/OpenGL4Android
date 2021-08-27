@@ -271,7 +271,6 @@ class VrVideoRenderer constructor(context: Context, glView: GLSurfaceView, playU
     override fun onSurfaceCreated(unused: GL10?, config: EGLConfig?) {
         // 将背景设置为黑色
         GLES30.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
-        // 编译顶点和片元着色程序
         // 顶点着色器和片段着色器
         val vertexShaderStr = LoadFileUtils.readResource(mContext, R.raw.vertex_video_shader)
         val vertexShaderId = ShaderUtils.compileVertexShader(vertexShaderStr)
