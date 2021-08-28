@@ -2,10 +2,7 @@ package com.dev.gles3.utils
 
 import android.content.Context
 import android.content.res.Resources
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
+import java.io.*
 
 
 /**
@@ -54,5 +51,48 @@ object LoadFileUtils {
             e.printStackTrace()
         }
         return shaderSource.toString()
+    }
+
+    /**
+     * 将Asset目录下文件copy到sdcard
+     */
+    fun copyFileIfNeed(context: Context, sourceName: String): Int {
+        var inputStream: InputStream? = null
+        var outputStream: OutputStream? = null
+        try {
+            // 默认存储在data/data/<包名>/file目录下
+            val modelFile = File(context.filesDir, sourceName)
+            inputStream = context.assets.open(sourceName)
+            if (modelFile.length().toInt() == inputStream.available()) {
+                return -1
+            }
+            outputStream = FileOutputStream(modelFile)
+            val buffer = ByteArray(1024)
+            var length = inputStream.read(buffer)
+            while (length > 0) {
+                outputStream.write(buffer, 0, length)
+                length = inputStream.read(buffer)
+            }
+            outputStream.flush()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return -1
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+            if (inputStream != null) {
+                try {
+                    inputStream.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        return 0
     }
 }

@@ -13,6 +13,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.transition.Visibility
 import com.dev.gles3.R
+import java.io.File
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -111,7 +112,15 @@ class VrVideoActivity : AppCompatActivity() {
     private fun initView() {
         glSurfaceView = findViewById(R.id.play_vr_glsv)
         glSurfaceView.setEGLContextClientVersion(3)
-        renderer = VrVideoRenderer(this, glSurfaceView, VIDEO_URL)
+        val videoUrl = "${this.filesDir}${File.separator}example.mp4"
+        Log.i(TAG, "initView: videoUrl = $videoUrl")
+        val file = File(videoUrl)
+        renderer = if (file.exists()) {
+            VrVideoRenderer(this, glSurfaceView, videoUrl)
+        } else {
+            VrVideoRenderer(this, glSurfaceView, VIDEO_URL)
+        }
+        //renderer = VrVideoRenderer(this, glSurfaceView, VIDEO_URL)
         glSurfaceView.setRenderer(renderer)
         glSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
 

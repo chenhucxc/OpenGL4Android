@@ -24,7 +24,8 @@ import kotlin.math.sin
  * @author     : hudongxin
  * @date       : 8/17/21
  */
-class VrVideoRenderer constructor(context: Context, glView: GLSurfaceView, playUrl: String) : GLSurfaceView.Renderer {
+class VrVideoRenderer constructor(context: Context, glView: GLSurfaceView, playUrl: String) :
+    GLSurfaceView.Renderer {
 
     companion object {
         private const val TAG = "VideoRenderer"
@@ -88,8 +89,8 @@ class VrVideoRenderer constructor(context: Context, glView: GLSurfaceView, playU
     private var screenHeight = 0
 
     private var mXAngle = 0f
-    private var mYAngle = -90f
-    private var mZAngle = 0f
+    private var mYAngle = 0f
+    private var mZAngle = 1f
 
     fun changeInteractionMode() {
         interactionModeNormal = !interactionModeNormal
@@ -234,10 +235,26 @@ class VrVideoRenderer constructor(context: Context, glView: GLSurfaceView, playU
             return 0
         }
         GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textureIds[0])
-        GLES30.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR.toFloat())
-        GLES30.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR.toFloat())
-        GLES30.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE)
-        GLES30.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE)
+        GLES30.glTexParameterf(
+            GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+            GL10.GL_TEXTURE_MIN_FILTER,
+            GL10.GL_LINEAR.toFloat()
+        )
+        GLES30.glTexParameterf(
+            GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+            GL10.GL_TEXTURE_MAG_FILTER,
+            GL10.GL_LINEAR.toFloat()
+        )
+        GLES30.glTexParameteri(
+            GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+            GL10.GL_TEXTURE_WRAP_S,
+            GL10.GL_CLAMP_TO_EDGE
+        )
+        GLES30.glTexParameteri(
+            GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+            GL10.GL_TEXTURE_WRAP_T,
+            GL10.GL_CLAMP_TO_EDGE
+        )
 
         return textureIds[0]
     }
@@ -276,7 +293,10 @@ class VrVideoRenderer constructor(context: Context, glView: GLSurfaceView, playU
         val vertexShaderId = ShaderUtils.compileVertexShader(vertexShaderStr)
         val fragmentShaderStr = LoadFileUtils.readResource(mContext, R.raw.fragment_video_shader)
         val fragmentShaderId = ShaderUtils.compileFragmentShader(fragmentShaderStr)
-        Log.e(TAG, "onSurfaceCreated: compile result vertex = $vertexShaderId, fragment = $fragmentShaderId")
+        Log.e(
+            TAG,
+            "onSurfaceCreated: compile result vertex = $vertexShaderId, fragment = $fragmentShaderId"
+        )
         // 连接程序
         mProgram = ShaderUtils.linkProgram(vertexShaderId, fragmentShaderId)
         Log.e(TAG, "onSurfaceCreated: linkProgram result = $mProgram")
@@ -341,7 +361,7 @@ class VrVideoRenderer constructor(context: Context, glView: GLSurfaceView, playU
         Matrix.setLookAtM(
             mViewMatrix, 0,
             0f, 0.0f, 0.0f,
-            mXAngle, mYAngle, mZAngle,
+            mXAngle, mYAngle, -mZAngle,
             0.0f, 1.0f, 0.0f
         )
         // 是否支持陀螺仪
@@ -349,6 +369,10 @@ class VrVideoRenderer constructor(context: Context, glView: GLSurfaceView, playU
             Matrix.multiplyMM(mModelMatrix, 0, mProjectMatrix, 0, mRotateMatrix, 0)
             Matrix.multiplyMM(mMVPMatrix, 0, mModelMatrix, 0, mViewMatrix, 0)
         } else {
+            /*Log.i(TAG, "onDrawFrame: mXAngle = $mXAngle, mYAngle = $mYAngle, mZAngle = $mZAngle")
+            Matrix.rotateM(mProjectMatrix, 0, -mXAngle, 1f, 0f, 0f)
+            Matrix.rotateM(mProjectMatrix, 0, -mYAngle, 0f, 1f, 0f)
+            Matrix.rotateM(mProjectMatrix, 0, -mZAngle, 0f, 0f, 1f)*/
             Matrix.multiplyMM(mMVPMatrix, 0, mProjectMatrix, 0, mViewMatrix, 0)
         }
         // 激活纹理
@@ -357,11 +381,25 @@ class VrVideoRenderer constructor(context: Context, glView: GLSurfaceView, playU
 
         // 启用顶点坐标属性
         GLES30.glEnableVertexAttribArray(mPositionLocation)
-        GLES30.glVertexAttribPointer(mPositionLocation, COORDS_PER_VERTEX, GLES30.GL_FLOAT, false, 12, vertexBuffer)
+        GLES30.glVertexAttribPointer(
+            mPositionLocation,
+            COORDS_PER_VERTEX,
+            GLES30.GL_FLOAT,
+            false,
+            12,
+            vertexBuffer
+        )
 
         // 启用纹理坐标属性
         GLES30.glEnableVertexAttribArray(mTexCoordLocation)
-        GLES30.glVertexAttribPointer(mTexCoordLocation, COORDS_PER_TEXTURE, GLES30.GL_FLOAT, false, 0, mTexVertexBuffer)
+        GLES30.glVertexAttribPointer(
+            mTexCoordLocation,
+            COORDS_PER_TEXTURE,
+            GLES30.GL_FLOAT,
+            false,
+            0,
+            mTexVertexBuffer
+        )
 
         // 旋转矩阵
         GLES20.glUniformMatrix4fv(rotateMatrixLocation, 1, false, mRotateMatrix, 0)

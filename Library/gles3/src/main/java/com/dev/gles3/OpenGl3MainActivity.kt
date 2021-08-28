@@ -2,11 +2,13 @@ package com.dev.gles3
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.dev.gles3.example.*
 import com.dev.gles3.player.VrGlSurfaceViewActivity
 import com.dev.gles3.player.VrVideoActivity
+import com.dev.gles3.utils.LoadFileUtils
 
 /**
  * description : java 层 OpenGL ES 使用示例
@@ -15,6 +17,9 @@ import com.dev.gles3.player.VrVideoActivity
  * @date       : 8/14/21
  */
 class OpenGl3MainActivity : AppCompatActivity() {
+    companion object {
+        private const val TAG = "OpenGl3MainActivity"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,5 +60,11 @@ class OpenGl3MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btn_video_03).setOnClickListener {
             startActivity(Intent(this, VrVideoActivity::class.java))
         }
+    }
+
+    private fun copyFile() {
+        val assetFileName = "example.mp4"
+        val ret = LoadFileUtils.copyFileIfNeed(this, assetFileName)
+        Log.i(TAG, "copyFile: ret = $ret")
     }
 }
